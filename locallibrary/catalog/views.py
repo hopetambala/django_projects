@@ -1,6 +1,28 @@
 from django.shortcuts import render
-
 from catalog.models import Book, Author, BookInstance, Genre
+from django.views import generic
+
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 20
+
+    '''def get_context_data(self, **kwargs):
+        # Call the base implementation first to get the context
+        context = super(BookListView, self).get_context_data(**kwargs)
+        # Create any data and add it to the context
+        context['some_data'] = 'This is just some data'
+        return context'''
+
+class BookDetailView(generic.DetailView):
+    model = Book
+
+    def book_detail_view(request, primary_key):
+        try:
+            book = Book.objects.get(pk=primary_key)
+        except Book.DoesNotExist:
+            raise Http404('Book does not exist')
+
+        return render(request, 'catalog/book_detail.html', context={'book': book})
 
 def index(request):
     """View function for home page of site."""
@@ -24,3 +46,5 @@ def index(request):
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
+
+
