@@ -2,20 +2,21 @@ from django.shortcuts import render
 from catalog.models import Book, Author, BookInstance, Genre
 from django.views import generic
 
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 20
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+
 class BookListView(generic.ListView):
     model = Book
     paginate_by = 20
 
-    '''def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the context
-        context = super(BookListView, self).get_context_data(**kwargs)
-        # Create any data and add it to the context
-        context['some_data'] = 'This is just some data'
-        return context'''
-
 class BookDetailView(generic.DetailView):
     model = Book
 
+    #not necessary
     def book_detail_view(request, primary_key):
         try:
             book = Book.objects.get(pk=primary_key)
