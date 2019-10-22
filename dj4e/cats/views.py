@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 
 from cats.models import Cat, Breed
-from cats.forms import MakeForm
+from cats.forms import BreedForm
 
 # Create your views here.
 
@@ -31,17 +31,17 @@ class BreedCreate(LoginRequiredMixin, View):
     template = 'cats/breed_form.html'
     success_url = reverse_lazy('cats:all')
     def get(self, request) :
-        form = MakeForm()
+        form = BreedForm()
         ctx = { 'form': form }
         return render(request, self.template, ctx)
 
     def post(self, request) :
-        form = MakeForm(request.POST)
+        form = BreedForm(request.POST)
         if not form.is_valid() :
             ctx = {'form' : form}
             return render(request, self.template, ctx)
 
-        make = form.save()
+        breed = form.save()
         return redirect(self.success_url)
 
 class BreedUpdate(LoginRequiredMixin, View):
@@ -50,13 +50,13 @@ class BreedUpdate(LoginRequiredMixin, View):
     template = 'cats/breed_form.html'
     def get(self, request, pk) :
         breed = get_object_or_404(self.model, pk=pk)
-        form = MakeForm(instance=breed)
+        form = BreedForm(instance=breed)
         ctx = { 'form': form }
         return render(request, self.template, ctx)
 
     def post(self, request, pk) :
         breed = get_object_or_404(self.model, pk=pk)
-        form = MakeForm(request.POST, instance = breed)
+        form = BreedForm(request.POST, instance = breed)
         if not form.is_valid() :
             ctx = {'form' : form}
             return render(request, self.template, ctx)
@@ -66,13 +66,13 @@ class BreedUpdate(LoginRequiredMixin, View):
 
 class BreedDelete(LoginRequiredMixin, DeleteView):
     model = Breed
-    success_url = reverse_lazy('autos:all')
+    success_url = reverse_lazy('cats:all')
     template = 'cats/breed_confirm_delete.html'
 
     def get(self, request, pk) :
         breed = get_object_or_404(self.model, pk=pk)
-        form = MakeForm(instance=breed)
-        ctx = { 'make': make }
+        form = BreedForm(instance=breed)
+        ctx = { 'breed': breed }
         return render(request, self.template, ctx)
 
     def post(self, request, pk) :
