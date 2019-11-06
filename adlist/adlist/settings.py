@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ads.apps.AdsConfig',
+    'home.apps.HomeConfig',  
 
     # Extensions - installed with pip3 / requirements.txt
     'django_extensions',
